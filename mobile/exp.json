@@ -1,0 +1,21 @@
+{
+  "name": "Notes App",
+  "description": "Notes App for Interactive Web Module 4",
+  "slug": "5117-rnpt",
+  "privacy": "public",
+  "sdkVersion": "22.0.0",
+  "version": "0.0.0",
+  "orientation": "portrait",
+  "primaryColor": "#cccccc",
+  "icon": "./icon.png",
+  "loading": {
+    "icon": "./icon.png",
+    "hideExponentText": false
+  },
+  "packagerOpts": {
+    "assetExts": ["ttf", "mp4"]
+  },
+  "ios": {
+    "supportsTablet": true
+  }
+}

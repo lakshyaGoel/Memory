@@ -1,0 +1,35 @@
+{
+  "name": "react-native-project-template",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "start": "node ./server/bin/www",
+    "dev": "heroku local server --procfile Procfile.dev",
+    "dev-express": "nodemon ./server/bin/www",
+    "postinstall": "cd mobile && npm install"
+  },
+  "engines": {
+    "node": "8.5.x"
+  },
+  "dependencies": {
+    "body-parser": "~1.17.1",
+    "co": "^4.6.0",
+    "cookie-parser": "~1.4.3",
+    "debug": "~2.6.3",
+    "express": "~4.15.2",
+    "express-jwt": "^5.3.0",
+    "express-jwt-authz": "^1.0.0",
+    "express-mongo-db": "^2.0.3",
+    "gridfs-stream": "^1.1.1",
+    "hbs": "~4.0.1",
+    "jwks-rsa": "^1.2.1",
+    "morgan": "~1.8.1",
+    "multer": "^1.3.0",
+    "multer-gridfs-storage": "^2.1.0",
+    "node-fetch": "^1.7.3",
+    "serve-favicon": "~2.4.2"
+  },
+  "devDependencies": {
+    "nodemon": "^1.12.1"
+  }
+}

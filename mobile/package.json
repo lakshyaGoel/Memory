@@ -1,0 +1,20 @@
+{
+  "name": "hw4",
+  "version": "0.0.0",
+  "description": "5117 Module 4 Homework",
+  "author": null,
+  "private": true,
+  "main": "App.js",
+  "dependencies": {
+    "@expo/vector-icons": "~5.2.0",
+    "expo": "^22.0.0",
+    "jwt-decode": "^2.2.0",
+    "react": "16.0.0-beta.5",
+    "react-native": "https://github.com/expo/react-native/archive/sdk-22.0.2.tar.gz",
+    "react-navigation": "^1.0.0-beta.19"
+  },
+  "devDependencies": {
+    "eslint": "^4.7.2",
+    "eslint-config-anf": "^0.5.2"
+  }
+}

@@ -4,22 +4,23 @@ CSCI 5117, Fall 2017, [assignment description](https://docs.google.com/document/
 
 ## App Info:
 
-* Team Name: TODO
-* App Name: TODO
-* App Link: <https://expo.io/@TODO/TODO>
+* Team Name: val=n
+* App Name: Notes
+* App Link: <TO-DO>
 
 ### Students
 
-* First Last, x500@umn.edu
-* ...
+* Lakshya Goel, goel0072@umn.edu
+* Nishka Monteiro, monte299@umn.edu
+* Akifumi Nakamachi, nakam052@umn.edu
+* Vaybhav Shaw, shaw0162@umn.edu
 
 
 ## Key Features
 
-**Describe the most challenging features you implemented
-(one sentence per bullet, maximum 4 bullets):**
-
-* ...
+* Allows to write and save notes.
+* Text Editor allows creating lists with formatting and emoticons using search. 
+* Notes can be shared with the other users of the App.
 
 
 ## Screenshots of App
