@@ -10,7 +10,7 @@ const bodyParser = require('body-parser');
 const expressMongoDb = require('express-mongo-db');
 
 const auth = require('./auth');
-const dbApi = require('./routes/db-api');
+const dbApi = require('./routes/db-api-old');
 
 const app = express();
 app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
