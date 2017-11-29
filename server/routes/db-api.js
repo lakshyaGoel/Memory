@@ -91,7 +91,7 @@ router.post("/get-note", checkJwt, function(req,res, next){
 });
 
 // delete note by id
-router.post("/delete", checkJwt, function(req, res, next){// TODO: check functionality.
+router.post("/delete", checkJwt, function(req, res, next){
     var mongoose = require("mongoose");
     var noteId = req.body.noteId;
     console.log("detect delete" ,noteId);
