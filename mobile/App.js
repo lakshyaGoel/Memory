@@ -6,32 +6,45 @@ import {
   Text,
   View,
 } from 'react-native';
-import navigation, { StackNavigator } from 'react-navigation';
+import navigation, { TabNavigator } from 'react-navigation';
+import { MaterialIcons, FontAwesome, MaterialCommunityIcons } from '@expo/vector-icons';
 
 import { withAuth } from './Auth';
 
-import AuthDemoScreen from './screens/AuthDemoScreen';
-import HomeScreen from './screens/HomeScreen';
-import FetchDemoScreen from './screens/FetchDemoScreen';
+import Notes from './screens/Notes';
+import AddText from './screens/AddText';
+import AddImage from './screens/AddImage';
+import Options from './screens/Options';
 
-const RootNavigator = StackNavigator({
-  Home: {
-    screen: HomeScreen,
+const RootNavigator = TabNavigator({
+  Notes: {
+    screen: Notes,
     navigationOptions: {
-      headerTitle: 'Home',
+      title: 'Notes',
+      tabBarIcon: ({ tintColor }) => <MaterialIcons name="note" size={32} color={tintColor} />
     },
   },
-  AuthDemo: {
-    screen: AuthDemoScreen,
+  Text: {
+    screen: AddText,
     navigationOptions: {
-      headerTitle: 'Auth Demo',
+      title: 'Save Text',
+      tabBarIcon: ({ tintColor }) => <MaterialCommunityIcons name="format-text" size={32} color={tintColor} />
     },
 
   },
-  FetchDemo: {
-    screen: FetchDemoScreen,
+  Image: {
+    screen: AddImage,
     navigationOptions: {
-      headerTitle: 'Fetch Demo',
+      title: 'Save Image',
+      tabBarIcon: ({ tintColor }) => <MaterialIcons name="image" size={32} color={tintColor} />
+    },
+
+  },
+  Options: {
+    screen: Options,
+    navigationOptions: {
+      title: 'Options',
+      tabBarIcon: ({ tintColor }) => <FontAwesome name="list" size={32} color={tintColor} />
     },
   },
 });
