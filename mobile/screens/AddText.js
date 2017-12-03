@@ -9,14 +9,15 @@ import {
 } from 'react-native';
 import config from '../config';
 import { Form, Separator, InputField, SwitchField } from 'react-native-form-generator';
-
+import Toast, {DURATION} from 'react-native-easy-toast';
 export default class FormView extends React.Component{
   constructor(props){
     super(props);
     this.state = {
       formData:{},
       note_share: false,
-      disable_submit: true
+      disable_submit: false,
+      position: 'top'
     }
   }
   handleFormChange(formData){
@@ -44,7 +45,7 @@ export default class FormView extends React.Component{
       userID: this.props.screenProps.profile.name,
       lastEdit: this.props.screenProps.profile.name
     };
-
+    
     const {getAuthorizationHeader} = this.props.screenProps;
     const auth = getAuthorizationHeader();
     let request = new Request(`${config.API_BASE}/api/db/add-note`, {
@@ -61,7 +62,9 @@ export default class FormView extends React.Component{
         return true;
       }
     }).then(re => {
-      console.log("Should go to Home");
+      this.refs.toast.show('Note Saved!', DURATION.LENGTH_SHORT);
+      this.setState({formData:{}});
+      //TO-DO Navigate to ALl Notes
     })
       .catch(function (error) {
         console.log('Request failed', error);
@@ -161,7 +164,7 @@ export default class FormView extends React.Component{
           underlayColor="#99d9f4">
           <Text style={styles.buttonText}>Save</Text>
         </TouchableHighlight>
-
+        <Toast ref="toast" position={this.state.position}/>
       </ScrollView>);
     }
   }
