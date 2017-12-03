@@ -15,6 +15,7 @@ import Notes from './screens/Notes';
 import AddText from './screens/AddText';
 import AddImage from './screens/AddImage';
 import Options from './screens/Options';
+import SignIn from './screens/AuthDemoScreen';
 
 const RootNavigator = TabNavigator({
   Notes: {
@@ -47,6 +48,14 @@ const RootNavigator = TabNavigator({
       tabBarIcon: ({ tintColor }) => <FontAwesome name="list" size={32} color={tintColor} />
     },
   },
+  //Temporary. Needs to be removed after signIn and signUp works
+  SignIn:{
+    screen: SignIn,
+    navigationOptions:{
+      title: 'Sign In',
+      tabBarIcon: ({ tintColor }) => <FontAwesome name="list" size={32} color={tintColor} />
+    }
+  }
 });
 
 class App extends React.Component {
