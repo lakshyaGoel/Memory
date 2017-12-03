@@ -5,8 +5,11 @@ import {
   Text,
   View,
   Image,
+  TouchableHighlight,
 } from 'react-native';
 import { Constants, ImagePicker } from 'expo';
+import { MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
+
 
 export default class AddImage extends React.Component {
   state = {
@@ -43,14 +46,16 @@ export default class AddImage extends React.Component {
     
     return (
       <View style={styles.container}>
-        <Button
-          title="Pick an image from camera roll"
-          onPress={this._pickImage}
-        />
-        <Button
-          title="Pick an image from camera roll"
-          onPress={this._pickImageCam}
-        />
+
+        <TouchableHighlight onPress={this._pickImageCam}>
+          <MaterialCommunityIcons name="camera" size={32}  />
+        </TouchableHighlight>
+
+        <TouchableHighlight onPress={this._pickImage}>
+          <MaterialIcons name="photo-library" size={32}  />
+        </TouchableHighlight>
+
+        
         {image &&
           <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />}
       </View>
@@ -70,5 +75,10 @@ const styles = StyleSheet.create({
     fontSize: 20,
     textAlign: 'center',
     marginTop: 40,
+  },
+  button: {
+    alignItems: 'center',
+    backgroundColor: '#DDDDDD',
+    padding: 10
   },
 });
