@@ -1,7 +1,3 @@
-/**
- * Created by reiven on 2017/11/07.
- */
-
 var mongoose = require("mongoose");
 mongoose.Promise = global.Promise;
 var Schema = mongoose.Schema;
@@ -23,24 +19,6 @@ var note = new mongoose.Schema({
         w: {type: Boolean, default: false}// write authority, if true, note can edit, else note cannot edit, default: false
     }],
     type: {type: String, default: "note"},// put note type: [note | code], default: note
-    codeSetting: {
-        mode: {type: String},
-        theme: {type: String},
-        autoComplete: {type: Boolean, default: false},
-        lineNumber: {type: Boolean, default: false},
-    },
-    like: [// liked user data to prevent duplicate like and dislike
-        {
-            userId: {type: Schema.Types.ObjectId},
-            createdAt: {type: Date, default: Date.now}
-        }
-    ],
-    dislike: [// liked user data to prevent duplicate like and dislike
-        {
-            userId: {type: Schema.Types.ObjectId},
-            createdAt: {type: Date, default: Date.now}
-        }
-    ],
     history: []
 }, {timestamps: {}});// timestamp automatically set createdAt, and updatedAt
 

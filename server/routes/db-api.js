@@ -320,34 +320,38 @@ router.post('/add-note', checkJwt, function(req, res, next){
     var content = req.body.noteCont;
     var desc = req.body.noteDesc;
     var tags = req.body.tags;
-    tags = tags.split(", ").map(function(b){
-        return b.substr(1);
-    });
+    
     var bIsTagEmpty = false;
-    if(tags.length === 1 && tags[tags.length-1].length === 0){
+    if (tags) {
         bIsTagEmpty = true;
+        tags = tags
+            .split(", ")
+            .map(function (b) {
+                return b.substr(1);
+            });
+    } else {
+        bIsTagEmpty = true;
+        tags = ["noTag"];
     }
-    var share = req.body.private === "No";// share message is string "Yes"/"No" not Boolean: true/false. it cause problem
+    var share = req.body.sharePref;
     var type = req.body.noteType;
-    var shareUser = req.body.shared;
-    shareUser = shareUser.split(", ").map(function(b){
-        return b;
-    });
-    var bIsSharedListEmpty;
-    if(shareUser.length === 1 && shareUser[shareUser.length-1].length === 0){
-        bIsSharedListEmpty = true;
-        share = false;
-    }else{
-        bIsSharedListEmpty = false;
-        share = true;
+    if(share){
+        var shareUser = req.body.shared;
+        shareUser = shareUser.split(", ").map(function(b){
+            return b;
+        });
+        var bIsSharedListEmpty;
+        if(shareUser.length === 1 && shareUser[shareUser.length-1].length === 0){
+            bIsSharedListEmpty = true;
+            share = false;
+        }else{
+            bIsSharedListEmpty = false;
+            share = true;
+        }
     }
     var shareUserIdList = [];
     var userId = req.body.userID;
     var lastEditId = req.body.userID;
-    var mode = req.body.mode;
-    var theme = req.body.theme;
-    var auto = req.body.autoComplete;
-    var line = req.body.lineNumber;
 
     var Tag = require("../model/Tag");
     var User = require("../model/User");
@@ -446,14 +450,14 @@ router.post('/add-note', checkJwt, function(req, res, next){
                 tagSaveList = [];
             }
             userId = findUserByUserName(userId)._id;
-            if(!bIsSharedListEmpty){
+            if(share){
                 shareUser.forEach(element =>{
                     shareUserIdList.push({userId: findUserByNickName(element)._id, r: true, w: false});
                 });
             }else{
                 shareUserIdList = [];
             }
-            var newNoteId = addNote(tagSaveList, shareUserIdList, title, content, desc, share, type, mode, theme, auto, line, userId, userId);
+            var newNoteId = addNote(tagSaveList, shareUserIdList, title, content, desc, share, type, userId, userId);
 
             if(!bIsTagEmpty){
                 for(var i = 0; i < tagSaveList.length; i ++){
@@ -462,7 +466,7 @@ router.post('/add-note', checkJwt, function(req, res, next){
                             console.log("Something gone wrong");
                         }else{
                             console.log("Success!!");
-                        }π
+                        }
                     });
                 }
             }
@@ -471,7 +475,7 @@ router.post('/add-note', checkJwt, function(req, res, next){
 
 });
 
-function addNote(tagsList, shareUserList, title, content, desc, share, type, mode, theme, autoComplete, lineNumber, userId, lastEdit){
+function addNote(tagsList, shareUserList, title, content, desc, share, type, userId, lastEdit){
     const Note = require("../model/Note");
     var note = new Note();
     note.userId = userId;
@@ -482,13 +486,8 @@ function addNote(tagsList, shareUserList, title, content, desc, share, type, mod
     note.tags = tagsList;
     note.share = share;
     note.shareUser = shareUserList;
-    // note.like = likeUserList;
-    // note.dislike = dislikeUserList;
     note.type = type;
-    note.codeSetting.mode = mode; // example codeSetting
-    note.codeSetting.theme = theme; // example codeSetting
-    note.codeSetting.autoComplete = autoComplete; //default is false, so change true
-    note.codeSetting.lineNumber = lineNumber;  //default is false, so change true
+   
     note.save(function(err){
         if(err){
             console.log("something else");

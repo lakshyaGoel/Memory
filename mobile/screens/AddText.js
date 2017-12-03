@@ -7,7 +7,7 @@ import {
   View,ScrollView,
   TouchableHighlight, TextInput
 } from 'react-native';
-
+import config from '../config';
 import { Form, Separator, InputField, SwitchField } from 'react-native-form-generator';
 
 export default class FormView extends React.Component{
@@ -31,10 +31,10 @@ export default class FormView extends React.Component{
       
     this.props.onFormChange && this.props.onFormChange(formData);
   }
-  handleSubmit(){
+  handleSubmit() {
     var noteData = {
       noteId: "",
-      private: !this.state.note_share,
+      sharePref: this.state.note_share,
       noteType: "Text",
       noteTitle: this.state.formData.note_title,
       noteDesc: this.state.formData.note_description,
@@ -42,9 +42,30 @@ export default class FormView extends React.Component{
       tags: this.state.formData.note_tags,
       shared: this.state.formData.note_shared,
       userID: this.props.screenProps.profile.name,
-      lastEdit: this.props.screenProps.profile.name,
-  };
-    console.log(noteData);
+      lastEdit: this.props.screenProps.profile.name
+    };
+
+    const {getAuthorizationHeader} = this.props.screenProps;
+    const auth = getAuthorizationHeader();
+    let request = new Request(`${config.API_BASE}/api/db/add-note`, {
+      method: 'POST',
+      headers: {
+        "Authorization": auth.Authorization,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(noteData)
+    });
+    fetch(request).then(function (data) {
+      console.log('Request succeeded with JSON response', data);
+      if (data.status === 200) {
+        return true;
+      }
+    }).then(re => {
+      console.log("Should go to Home");
+    })
+      .catch(function (error) {
+        console.log('Request failed', error);
+      });
   }
   render(){
     return (
@@ -140,7 +161,6 @@ export default class FormView extends React.Component{
           underlayColor="#99d9f4">
           <Text style={styles.buttonText}>Save</Text>
         </TouchableHighlight>
-        <Text>{JSON.stringify(this.state.formData)}</Text>
 
       </ScrollView>);
     }
