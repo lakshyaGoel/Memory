@@ -7,7 +7,7 @@ import {
 } from 'react-native';
 import Card from './components/card';
 
-export default class Notes{
+export default class Notes extends React.Component{
 
   render() {
     
