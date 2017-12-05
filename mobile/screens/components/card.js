@@ -1,25 +1,35 @@
 import React from 'react';
 import {
-    Button,
     StyleSheet,
     Text,
     View,
 } from 'react-native';
+import { Card, ListItem, Button } from 'react-native-elements'
 
-const CardComponent = () => {
+const CardComponent = ({title, imgPath, description}) =>{
     return (
-        <View>
-            <Text>Hello</Text>
-        </View>
+        <Card style={{width: "100%"}}
+            title={title? title:"Dummy title"}
+            image={imgPath ? imgPath:require('../../src/image/dummy.png')}>
+            <Text style={{marginBottom: 10}}>
+                {description? description: "dummy description goes here."}
+            </Text>
+            <Button
+                backgroundColor='#03A9F4'
+                buttonStyle={{borderRadius: 0, marginLeft: 0, marginRight: 0, marginBottom: 0}}
+                title='VIEW Memory' />
+        </Card>
     )
 };
 
-class Card extends React.Component {
+export default class Memory extends React.Component {
+    constructor(props){
+        super(props);
+    }
+
     render(){
         return (
-            <CardComponent/>
+            <CardComponent title={this.props.title} />
         )
     }
 }
-
-export default Card;
