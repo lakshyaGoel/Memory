@@ -4,7 +4,7 @@
 
 function generateDemoUser(){
     console.info("generate demo User data");
-    var User = require("../model/User");
+    var User = require("../model/Old-save/User");
     var userName = ["nakam052@umn.edu", "Pico Taro", "Kosaka Daimaou", "Ninja Slayer", "Serval Chan", "One-Punch man", "Saitama", "Lil Wayne", "Kanye West", "Ty Dolla Sign", "Tinashe"];
     var errorCount = 0;
     for(var i = 0; i < userName.length; i++){
@@ -47,7 +47,7 @@ function generateNote(){
      *      - userId, tags, shareUser, like, dislike
      */
     var Tag = require("../model/Tag");
-    var User = require("../model/User");
+    var User = require("../model/Old-save/User");
     var tagPromise = Promise.resolve(Tag.find());
     var userPromise = Promise.resolve(User.find());
     Promise.all([tagPromise, userPromise]).then(
@@ -90,7 +90,7 @@ function generateNote(){
                 return result;
             }
 
-            var Note = require("../model/Note");
+            var Note = require("../model/Old-save/Note");
 
             function generateNoteParts(title, content, currentCallNumber){
                 var result = new Note();
