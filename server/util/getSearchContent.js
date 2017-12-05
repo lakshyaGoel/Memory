@@ -17,7 +17,7 @@ function getSearchContent(param, userId){
     // console.log("find user ",userId);
     //console.log(this.);
     //console.log("Parameter Passed is :"+ param);
-    const Note = require("../model/Note");
+    const Note = require("../model/Old-save/Note");
     var query = {};
     userId = mongoose.Types.ObjectId(userId);
 

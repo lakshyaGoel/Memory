@@ -15,7 +15,7 @@
 var mongoose = require("mongoose");
 function getContent(param, userId){
     // console.log("find user ",userId);
-    const Note = require("../model/Note");
+    const Note = require("../model/Old-save/Note");
     var query = {};
     userId = mongoose.Types.ObjectId(userId);
 
