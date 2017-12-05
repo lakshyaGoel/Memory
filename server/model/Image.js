@@ -5,8 +5,8 @@ var Schema = mongoose.Schema;
 mongoose.connect(process.env.DB_URI);
 
 var image = new mongoose.Schema({
-   id: Schema.Types.ObjectId,
-    tagIdList: [{type: Schema.Types.ObjectId, ref:"Tag"}],
+    id: Schema.Types.ObjectId,
+    tagIdList: [{type: Schema.Types.ObjectId, ref: "Tag"}],
     description: String,
     imageBinary: String,
     userMail: String

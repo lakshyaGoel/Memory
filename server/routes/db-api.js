@@ -33,7 +33,7 @@ var ObjectId = require('mongoose').Types.ObjectId;
 router.post("/delete", checkJwt, function(req, res, next){
     var mongoose = require("mongoose");
     var noteId = req.body.noteId;
-    console.log("detect delete" ,noteId);
+    console.log("detect delete", noteId);
     // var userId = mongoose.Types.ObjectId(req.body.userId);//
     var Note = require("../model/Old-save/Note");
     Note.findOneAndRemove({_id: noteId}, (err, db) =>{
@@ -57,7 +57,7 @@ router.post('/all-note', checkJwt, function(req, res, next){
                 function(result){
                     // console.log("check data before send: ", result);
 
-                    res.send({content:result, currentUserId: userId});
+                    res.send({content: result, currentUserId: userId});
                 }
             ).catch(function(err){
                 console.log("something wrong:" + err);
@@ -80,7 +80,7 @@ router.post('/search-note', checkJwt, function(req, res, next){
             getContent(req.body.value, userId.toString()).then(
                 function(result){
                     // console.log("check data before send: ", result);
-                    res.send({content:result, currentUserId: userId});
+                    res.send({content: result, currentUserId: userId});
                 }
             ).catch(function(err){
                 console.log("something wrong:" + err);
@@ -102,7 +102,7 @@ router.post('/my-note', checkJwt, function(req, res, next){
                 function(result){
                     // console.log("check data before send: ", result);
 
-                    res.send({content:result, currentUserId: userId});
+                    res.send({content: result, currentUserId: userId});
                 }
             ).catch(function(err){
                 console.log("something wrong:" + err);
@@ -119,16 +119,16 @@ router.post('/add-note', checkJwt, function(req, res, next){
     var content = req.body.noteCont;
     var desc = req.body.noteDesc;
     var tags = req.body.tags;
-    
+
     var bIsTagEmpty = false;
-    if (tags) {
+    if(tags){
         bIsTagEmpty = true;
         tags = tags
-            .split(", ")
-            .map(function (b) {
-                return b.substr(1);
-            });
-    } else {
+        .split(", ")
+        .map(function(b){
+            return b.substr(1);
+        });
+    }else{
         bIsTagEmpty = true;
         tags = ["noTag"];
     }
@@ -140,7 +140,7 @@ router.post('/add-note', checkJwt, function(req, res, next){
             return b;
         });
         var bIsSharedListEmpty;
-        if(shareUser.length === 1 && shareUser[shareUser.length-1].length === 0){
+        if(shareUser.length === 1 && shareUser[shareUser.length - 1].length === 0){
             bIsSharedListEmpty = true;
             share = false;
         }else{
@@ -160,6 +160,7 @@ router.post('/add-note', checkJwt, function(req, res, next){
         function(result){
             var tagList = result[0];
             var userList = result[1];
+
             function findTagByTagName(tagName){
                 var result = tagList.filter(function(tagObject){
                     var result = false;
@@ -227,6 +228,7 @@ router.post('/add-note', checkJwt, function(req, res, next){
             function getTagId(tagName){
                 return isSet(findTagByTagName(tagName)._id, null);
             }
+
             function saveNewTag(tagsIdList){
                 var newIds = [];
                 var newPromise = []
@@ -235,11 +237,13 @@ router.post('/add-note', checkJwt, function(req, res, next){
                     if(tagsIdList[i].saveState == null){
                         newIds.push({tagName: tagsIdList[i].tagName, saveState: tag._id});
                         tag.tagName = tagsIdList[i].tagName;
-                        tag.save(function(err){});
+                        tag.save(function(err){
+                        });
                     }
                 }
                 return newIds;
             }
+
             if(!bIsTagEmpty){
                 var tagsIdList = getTagIdList(tags);
                 var tagSaveList = tagsIdList.map(function(col){
@@ -259,8 +263,8 @@ router.post('/add-note', checkJwt, function(req, res, next){
             var newNoteId = addNote(tagSaveList, shareUserIdList, title, content, desc, share, type, userId, userId);
 
             if(!bIsTagEmpty){
-                for(var i = 0; i < tagSaveList.length; i ++){
-                    Tag.update({"_id": ObjectId(tagSaveList[i])}, { $push: { noteId: newNoteId } }, function(err){
+                for(var i = 0; i < tagSaveList.length; i++){
+                    Tag.update({"_id": ObjectId(tagSaveList[i])}, {$push: {noteId: newNoteId}}, function(err){
                         if(err){
                             console.log("Something gone wrong");
                         }else{
@@ -269,7 +273,7 @@ router.post('/add-note', checkJwt, function(req, res, next){
                     });
                 }
             }
-            res.send(JSON.stringify({s:"Success"}));
+            res.send(JSON.stringify({s: "Success"}));
         });
 
 });
@@ -286,7 +290,7 @@ function addNote(tagsList, shareUserList, title, content, desc, share, type, use
     note.share = share;
     note.shareUser = shareUserList;
     note.type = type;
-   
+
     note.save(function(err){
         if(err){
             console.log("something else");
