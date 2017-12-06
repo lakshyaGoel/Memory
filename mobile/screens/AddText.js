@@ -15,46 +15,39 @@ export default class FormView extends React.Component{
     super(props);
     this.state = {
       formData:{},
-      note_share: false,
-      disable_submit: false,
+      disable_submit: true,
       position: 'top'
     }
   }
   handleFormChange(formData){
-    const t = formData.note_title;
-    const d = formData.note_description;
-    const c = formData.note_content;
+    const t = formData.memory_title;
+    const d = formData.memory_description;
+    const c = formData.memory_country;
     if(t && d && c){
-      this.setState({formData:formData, note_share: formData.sharing_note, disable_submit: false});  
+      this.setState({formData:formData, disable_submit: false});  
       }else{
-        this.setState({formData:formData, note_share: formData.sharing_note, disable_submit: true});
+        this.setState({formData:formData, disable_submit: true});
       }
       
     this.props.onFormChange && this.props.onFormChange(formData);
   }
   handleSubmit() {
-    var noteData = {
-      noteId: "",
-      sharePref: this.state.note_share,
-      noteType: "Text",
-      noteTitle: this.state.formData.note_title,
-      noteDesc: this.state.formData.note_description,
-      noteCont: this.state.formData.note_content,
-      tags: this.state.formData.note_tags,
-      shared: this.state.formData.note_shared,
-      userID: this.props.screenProps.profile.name,
-      lastEdit: this.props.screenProps.profile.name
+    var memoryData = {
+      memoryTitle: this.state.formData.memory_title,
+      memoryDescription: this.state.formData.memory_description,
+      memoryCountry: this.state.formData.memory_country,
+      memoryCities: this.state.formData.memory_cities,
+      userID: this.props.screenProps.profile.name
     };
-    
     const {getAuthorizationHeader} = this.props.screenProps;
     const auth = getAuthorizationHeader();
-    let request = new Request(`${config.API_BASE}/api/db/add-note`, {
+    let request = new Request(`${config.API_BASE}/api/db/add-memory`, {
       method: 'POST',
       headers: {
         "Authorization": auth.Authorization,
         "Content-Type": "application/json"
       },
-      body: JSON.stringify(noteData)
+      body: JSON.stringify(memoryData)
     });
     fetch(request).then(function (data) {
       console.log('Request succeeded with JSON response', data);
@@ -62,9 +55,9 @@ export default class FormView extends React.Component{
         return true;
       }
     }).then(re => {
-      this.refs.toast.show('Note Saved!', DURATION.LENGTH_SHORT);
-      this.setState({formData:{}});
-      //TO-DO Navigate to ALl Notes
+      this.refs.toast.show('You got a new Destination. Safe Travels!', DURATION.LENGTH_SHORT);
+      //this.setState({formData:{}});
+      //TO-DO Navigate to ALl memorys
     })
       .catch(function (error) {
         console.log('Request failed', error);
@@ -74,17 +67,17 @@ export default class FormView extends React.Component{
     return (
     <ScrollView keyboardShouldPersistTaps="always" style={styles.container}>
       <Form
-        ref='text_note'
+        ref='memory'
         onChange={this.handleFormChange.bind(this)}
-        label="Text Note">
+        label="Create a Memory">
         <InputField
-          ref='note_title'
-          label='Title'
-          placeholder='Title'
+          ref='memory_title'
+          label='Memory'
+          placeholder='Memory?'
           helpText={((self)=>{
             if(Object.keys(self.refs).length !== 0){
-              if(!self.refs.text_note.refs.note_title.valid){
-                return self.refs.text_note.refs.note_title.validationErrors.join("\n");
+              if(!self.refs.memory.refs.memory_title.valid){
+                return self.refs.memory.refs.memory_title.validationErrors.join("\n");
               }
 
             }
@@ -98,12 +91,12 @@ export default class FormView extends React.Component{
           />
         <InputField 
           label='Description' 
-          ref='note_description' 
+          ref='memory_description' 
           placeholder='Description'
           helpText={((self)=>{
             if(Object.keys(self.refs).length !== 0){
-              if(!self.refs.text_note.refs.note_description.valid){
-                return self.refs.text_note.refs.note_description.validationErrors.join("\n");
+              if(!self.refs.memory.refs.memory_description.valid){
+                return self.refs.memory.refs.memory_description.validationErrors.join("\n");
               }
 
             }
@@ -117,13 +110,13 @@ export default class FormView extends React.Component{
 
         <InputField
           multiline={true}
-          label='Content'
-          ref='note_content'
-          placeholder='Note Content'
+          label='Country'
+          ref='memory_country'
+          placeholder='Country Travelling to'
           helpText={((self)=>{
             if(Object.keys(self.refs).length !== 0){
-              if(!self.refs.text_note.refs.note_content.valid){
-                return self.refs.text_note.refs.note_content.validationErrors.join("\n");
+              if(!self.refs.memory.refs.memory_country.valid){
+                return self.refs.memory.refs.memory_country.validationErrors.join("\n");
               }
 
             }
@@ -134,35 +127,33 @@ export default class FormView extends React.Component{
           }, (value)=>{
             if(!value) return true;
           }]}/>
-        
         <InputField
-          multiline={true}
-          label='Tags'
-          ref='note_tags'
-          placeholder='Tags'
-          helpText='Enter tags like #note'
-          value={this.state.text}/>
-        
-        <SwitchField label='Do You Want to Share?'
-          ref="sharing_note"/>
-        
-        {
-          this.state.note_share
-            ? <InputField
-                multiline={true}
-                ref='note_shared'
-                placeholder='Share with?'
-                helpText='Enter usernames seperated by ,'
-                autoCapitalize='none'/>
-            : null
-        }
+          multiline = {true}
+          label = 'Cities'
+          ref = 'memory_cities'
+          placeholder = 'Cities travelling to'
+          autoCapitalize = 'none'
+          helpText={((self)=>{
+            if(Object.keys(self.refs).length !== 0){
+              if(!self.refs.memory.refs.memory_country.valid){
+                return self.refs.memory.refs.memory_country.validationErrors.join("\n");
+              }
+
+            }
+          })(this)}
+          validationFunction={[(value)=>{
+            if(value == '') return "Required";
+            if(!value) return true;
+          }, (value)=>{
+            if(!value) return true;
+          }]} />
         </Form>
         <TouchableHighlight
           disabled={this.state.disable_submit}
           style={styles.button}
           onPress={this.handleSubmit.bind(this)}
           underlayColor="#99d9f4">
-          <Text style={styles.buttonText}>Save</Text>
+          <Text style={styles.buttonText}>Travel</Text>
         </TouchableHighlight>
         <Toast ref="toast" position={this.state.position}/>
       </ScrollView>);
@@ -171,7 +162,7 @@ export default class FormView extends React.Component{
 
   const styles = StyleSheet.create({
     container: {
-      marginTop: 50,
+      marginTop: 100,
       padding: 20,
       backgroundColor: '#ffffff'
     },

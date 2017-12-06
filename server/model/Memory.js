@@ -8,7 +8,7 @@ var memory = new mongoose.Schema({
     id: Schema.Types.ObjectId,
     name: String,
     country: String,
-    city: String,
+    city: [],
     description: String,
     imageIdList: [{type: Schema.Types.ObjectId, ref: "Image"}],
     userMail: String

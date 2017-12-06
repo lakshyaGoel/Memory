@@ -161,9 +161,34 @@ router.post("/add-image-to-the-memory", checkJwt, function(req, res, next){
 
 // api when save new memory page
 router.post("/add-memory", checkJwt, function(req, res, next){
+    var memoryTitle = req.body.memoryTitle;
+    var memoryDescription = req.body.memoryDescription;
+    var memoryCountry = req.body.memoryCountry;
+    var memoryCities = req.body.memoryCities;
+    memoryCities = memoryCities.split(", ");
+    var userId = req.body.userID;
 
-});// END: router.post("/add-memory", checkJwt, function(req, res, next)
-
+    const Memory = require("../model/Memory");
+    const User = require("../model/Old-save/User");
+    var mem = new Memory();
+    mem.name = memoryTitle;
+    mem.country = memoryCountry;
+    mem.city = memoryCities;
+    mem.description = memoryDescription;
+    mem.imageIdList = [];
+    User.findOne({ "name": userId}, function(err, user){
+        if(err) return err;
+        mem.userMail = user._id;
+        mem.save(function(err){
+            if(err){
+                console.log(err);
+            }else{
+                console.log("Memory Saved!");
+            }
+        });
+        res.send(JSON.stringify({s: "Success"}));
+    })
+});
 
 // TODO: api to search certain tag
 // TODO: api to search certain duration between 2 date info.

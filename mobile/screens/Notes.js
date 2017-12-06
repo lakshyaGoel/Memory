@@ -24,8 +24,6 @@ export default class Notes extends React.Component {
     render(){
         return (
             <View style={styles.container}>
-                <Text>Show All notes (My Notes + Shared Notes) with a toggle at the top to show only My Notes. Also,
-                    show a small icon if the note is a Shared Note</Text>
                 <Memory/>
             </View>
         )
