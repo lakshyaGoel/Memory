@@ -3,7 +3,6 @@ var router = express.Router();
 const checkJwt = require('../auth').checkJwt;
 const fetch = require('node-fetch');
 var ObjectId = require('mongoose').Types.ObjectId;
-
 /**
  * What kind of API I need?
  *
@@ -29,6 +28,11 @@ var ObjectId = require('mongoose').Types.ObjectId;
  * - delete tag?
  */
 
+// MUST USE sendMessage Object to send message to the client
+// The style of sendMessage is
+// sendMessage = {status: boolean, data: object}
+
+
 // delete note by id
 router.post("/delete", checkJwt, function(req, res, next){
     var mongoose = require("mongoose");
@@ -46,6 +50,79 @@ router.post("/delete", checkJwt, function(req, res, next){
         res.status(200).send(response);
     });
 });
+
+
+// api to get all-memory item
+router.post("/all-memory", checkJwt, function(req, res, next){
+    let sendMessage = {"status": false, data:{}};
+
+    // get user mail address send from client
+    let userMail = req.body.userMail;
+    let Memory = require("../model/Memory");
+
+    if(userMail != ""){// TODO: need check this, maybe undefined or something.
+        Memory.find({"userMail": userMail}).exec(function(err, result){
+            if(!err){
+                sendMessage.status = true;
+                sendMessage.data = result;
+            }
+            res.send(sendMessage);
+        });
+    }else{
+        res.send(sendMessage);
+    }// TODO: need test. I did not test yet.
+});// END: router.post("/all-memory", checkJwt, function(req, res, next)
+
+
+// api to get image item of certain memory
+router.post("/memory-image", checkJwt, function(req, res, next){
+    let sendMessage = {"status": false, data:{}};
+
+    // get tapped memoryId send from client
+    let memoryId = req.body.memoryId;
+    let Memory = require("../model/Memory");
+    let Image = require("../model/Image");// I think I could omit, but anyway, wrote until test.
+
+    if(memoryId != ""){// TODO: need check this, maybe undefined or something.
+        Memory.find({_id: ObjectId(memoryId)})
+        .populate("imageIdList")// TODO: populate test!
+        .exec(function(err, result){
+            if(!err){
+                sendMessage.status = true;
+                sendMessage.data = result;
+            }
+            res.send(sendMessage);
+        });
+    }else{
+        res.send(sendMessage);
+    }
+});// END: router.post("/memory-image", checkJwt, function(req, res, next)
+
+// api to get certain image detail
+router.post("/image-detail", checkJwt, function(req, res, next){
+    let sendMessage = {"status": false, data:{}};
+
+    // get tapped imageId send from client
+    let imageId = req.body.imageId;
+    let Image = require("../model/Image");
+
+    if(imageId != ""){// TODO: need check this, maybe undefined or something.
+        Image.find({_id: ObjectId(imageId)})
+        .populate("tagIdList")// TODO: populate test!
+        .exec(function(err, result){
+            if(!err){
+                sendMessage.status = false;
+                sendMessage.data = result;
+            }
+            res.send(sendMessage);
+        });
+    }else{
+        res.send(sendMessage);
+    }
+});// END: router.post("/image-detail", checkJwt, function(req, res, next)
+
+// TODO: api to search sertain tag
+// TODO: api to search certain duration between 2 date info.
 
 // get api to show all note in main panel.
 router.post('/all-note', checkJwt, function(req, res, next){
