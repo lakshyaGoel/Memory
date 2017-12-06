@@ -7,7 +7,18 @@ import {
 } from 'react-native';
 import Memory from './components/card';
 
-
+// TODO: use Stateless Functional Component(SFC) to make your component smaller and maintainable!
+// TODO: separate Presentational Component(=SFC) and Container Component
+// TODO: one good idea relate to function in SFC is send parameter and function from Container Component to SFC, not define function!
+// What a great idea this is!
+//
+// don't know SFC? google it!
+// or see below.
+const item = ({text}) => {
+    return (
+        <View><Text>This is SFC, {text}</Text></View>
+    );
+};
 export default class Notes extends React.Component {
 
     render(){
