@@ -2,7 +2,11 @@ var express = require('express');
 var router = express.Router();
 const checkJwt = require('../auth').checkJwt;
 const fetch = require('node-fetch');
+
+// mongoose model and some parts
 var ObjectId = require('mongoose').Types.ObjectId;
+var Memory = require("../model/Memory");
+var Image = require("../model/Image");
 
 /**
  * What kind of API I need?
@@ -29,90 +33,141 @@ var ObjectId = require('mongoose').Types.ObjectId;
  * - delete tag?
  */
 
+// MUST USE sendMessage Object to send message to the client
+// The style of sendMessage is
+// sendMessage = {status: boolean, data: object}
+
+
 // delete note by id
 router.post("/delete", checkJwt, function(req, res, next){
-    var mongoose = require("mongoose");
-    var noteId = req.body.noteId;
-    console.log("detect delete", noteId);
-    // var userId = mongoose.Types.ObjectId(req.body.userId);//
-    var Note = require("../model/Old-save/Note");
-    Note.findOneAndRemove({_id: noteId}, (err, db) =>{
-        // console.log("find it",db);
 
-
-        let response = {
-            message: "successfully deleted"
-        };
-        res.status(200).send(response);
-    });
 });
 
-// get api to show all note in main panel.
-router.post('/all-note', checkJwt, function(req, res, next){
-    var getContent = require("../util/getContent");
-    var userExist = require("../util/checkUserExist");
-    userExist(req.body).then(function(userId){
-        if(userId){// user exist
-            getContent("all", userId.toString()).then(
-                function(result){
-                    // console.log("check data before send: ", result);
 
-                    res.send({content: result, currentUserId: userId});
-                }
-            ).catch(function(err){
-                console.log("something wrong:" + err);
-                res.send("wrong flg");
-            });
-        }else{
-            res.send("wrong flg");
+// api to get all-memory item
+router.post("/all-memory", checkJwt, function(req, res, next){
+    let sendMessage = {"status": false, data: {}};
+
+    // get user mail address send from client
+    let userMail = req.body.userMail;
+
+    if(userMail != ""){// TODO: need check this, maybe undefined or something.
+        Memory.find({"userMail": userMail}).exec(function(err, result){
+            if(!err){
+                // set sendMessage
+                sendMessage.status = true;
+                sendMessage.data = result;
+            }
+            res.send(sendMessage);
+        });
+    }else{
+        res.send(sendMessage);
+    }// TODO: need test. I did not test yet.
+});// END: router.post("/all-memory", checkJwt, function(req, res, next)
+
+
+// api to get image item of certain memory
+router.post("/memory-image", checkJwt, function(req, res, next){
+    let sendMessage = {"status": false, data: {}};
+
+    // get tapped memoryId send from client
+    let memoryId = req.body.memoryId;
+
+    if(memoryId != ""){// TODO: need check this, maybe undefined or something.
+        Memory.find({_id: ObjectId(memoryId)})
+        .populate("imageIdList")// TODO: populate test!
+        .exec(function(err, result){
+            if(!err){
+                // set sendMessage
+                sendMessage.status = true;
+                sendMessage.data = result;
+            }
+            res.send(sendMessage);
+        });
+    }else{
+        res.send(sendMessage);
+    }
+});// END: router.post("/memory-image", checkJwt, function(req, res, next)
+
+
+// api to get certain image detail
+router.post("/image-detail", checkJwt, function(req, res, next){
+    let sendMessage = {"status": false, data: {}};
+
+    // get tapped imageId send from client
+    let imageId = req.body.imageId;
+
+    if(imageId != ""){// TODO: need check this, maybe undefined or something.
+        Image.find({_id: ObjectId(imageId)})
+        .populate("tagIdList")// TODO: populate test!
+        .exec(function(err, result){
+            if(!err){
+                // set sendMessage
+                sendMessage.status = false;
+                sendMessage.data = result;
+            }
+            res.send(sendMessage);
+        });
+    }else{
+        res.send(sendMessage);
+    }
+});// END: router.post("/image-detail", checkJwt, function(req, res, next)
+
+
+// api when go to add new Image page
+router.post("/add-image-page", checkJwt, function(req, res, next){
+    let sendMessage = {"status": false, data: {}};
+
+    // get user mail address send from client
+    let userMail = req.body.userMail;
+    let memoryPromise = Memory.find({userMail: userMail});
+    let tagPromise = Tag.find({userMail: userMail});
+    Promise.all([memoryPromise, tagPromise])
+    .then(
+        function(result){
+            let memoryResult = result[0];
+            let tagResult = result[1];
+
+            // set sendMessage
+            sendMessage.status = true;
+            sendMessage.data = {memoryList: memoryResult, tagList: tagResult};
+            res.send(sendMessage);
+        },
+        function(reason){// if operation fault
+            sendMessage.data = {reason: reason};
+
+            // set sendMessage
+            res.send(sendMessage);
         }
-    });
-});// END: router.get('/all-note', checkJwt, function(req, res, next)
+    );
+});// END: router.post("/add-image-page", checkJwt, function(req, res, next)
 
 
-router.post('/search-note', checkJwt, function(req, res, next){
-    //console.log(req.body.val);
-    var getContent = require("../util/getSearchContent");
-    var userExist = require("../util/checkUserExist");
-    userExist(req.body.profile).then(function(userId){
-        if(userId){// user exist
-            //console.log("The VALUE"+req.body.val);
-            getContent(req.body.value, userId.toString()).then(
-                function(result){
-                    // console.log("check data before send: ", result);
-                    res.send({content: result, currentUserId: userId});
-                }
-            ).catch(function(err){
-                console.log("something wrong:" + err);
-                res.send("wrong flg");
-            });
-        }else{
-            res.send("wrong flg");
-        }
-    });
-});// END: router.get('/all-note', checkJwt, function(req, res, next)
+// api when save new Image
+router.post("/add-image-to-the-memory", checkJwt, function(req, res, next){
+    // TODO: think about how to get image from client?
 
-// get api to show my note in main panel.
-router.post('/my-note', checkJwt, function(req, res, next){
-    var getContent = require("../util/getContent");
-    var userExist = require("../util/checkUserExist");
-    userExist(req.body).then(function(userId){
-        if(userId){// user exist
-            getContent("my", userId.toString()).then(
-                function(result){
-                    // console.log("check data before send: ", result);
+    // procedure
+    // 1. add tag to tag db if tag is not in Tag db.
+    // 2. get tagId of tags which added in procedure1.
+    // 3. get memory data which have memoryId given from client
+    // 4. make new Image object and set info(set description, imageBinary, userMail, and push tagId)
+    // 5. just push Image object to memory's imageIdList!
 
-                    res.send({content: result, currentUserId: userId});
-                }
-            ).catch(function(err){
-                console.log("something wrong:" + err);
-                res.send("wrong flg");
-            });
-        }else{
-            res.send("wrong flg");
-        }
-    });
-});// END: router.get('/my-note', checkJwt, function(req, res, next)
+    // see: https://stackoverflow.com/questions/31021343/add-to-an-object-to-population-in-a-mongoose-model
+
+});// END: router.post("/add-image-to-the-memory", checkJwt, function(req, res, next)
+
+
+// api when save new memory page
+router.post("/add-memory", checkJwt, function(req, res, next){
+
+});// END: router.post("/add-memory", checkJwt, function(req, res, next)
+
+
+// TODO: api to search certain tag
+// TODO: api to search certain duration between 2 date info.
+
 
 router.post('/add-note', checkJwt, function(req, res, next){
     var title = req.body.noteTitle;
