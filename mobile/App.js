@@ -7,29 +7,29 @@ import {
   View,
 } from 'react-native';
 import navigation, { TabNavigator } from 'react-navigation';
-import { MaterialIcons, FontAwesome, MaterialCommunityIcons } from '@expo/vector-icons';
+import { FontAwesome, MaterialCommunityIcons, Entypo } from '@expo/vector-icons';
 
 import { withAuth } from './Auth';
 
-import Notes from './screens/Notes';
-import AddText from './screens/AddText';
+import Memories from './screens/Notes';
+import AddMemory from './screens/AddText';
 import AddImage from './screens/AddImage';
 import Options from './screens/Options';
 import SignIn from './screens/AuthDemoScreen';
 
 const RootNavigator = TabNavigator({
-  Notes: {
-    screen: Notes,
+  Memories: {
+    screen: Memories,
     navigationOptions: {
-      title: 'Notes',
-      tabBarIcon: ({ tintColor }) => <MaterialIcons name="note" size={32} color={tintColor} />
+      title: 'Memories',
+      tabBarIcon: ({ tintColor }) => <Entypo name="aircraft" size={32} color={tintColor} />
     },
   },
-  Text: {
-    screen: AddText,
+  AddMemory: {
+    screen: AddMemory,
     navigationOptions: {
-      title: 'Save Text',
-      tabBarIcon: ({ tintColor }) => <MaterialCommunityIcons name="format-text" size={32} color={tintColor} />
+      title: 'Add Memory',
+      tabBarIcon: ({ tintColor }) => <MaterialCommunityIcons name="airplane-takeoff" size={32} color={tintColor} />
     },
 
   },
@@ -37,7 +37,7 @@ const RootNavigator = TabNavigator({
     screen: AddImage,
     navigationOptions: {
       title: 'Save Image',
-      tabBarIcon: ({ tintColor }) => <MaterialIcons name="image" size={32} color={tintColor} />
+      tabBarIcon: ({ tintColor }) => <FontAwesome name="camera-retro" size={32} color={tintColor} />
     },
 
   },
