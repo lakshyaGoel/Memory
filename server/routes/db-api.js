@@ -150,17 +150,14 @@ router.post("/add-image-page", checkJwt, function(req, res, next){
 // api when save new Image
 router.post("/add-image-to-the-memory",checkJwt, function(req, res, next){
     let sendMessage = {"status": false, data: {}};
-    console.log("detect save image from client");
-    // res.send("test");
-    // exit(0);
-    // TODO: think about how to get image from client?
+
     let memoryId = req.body.memoryId? req.body.memoryId: false;
     let userMail = req.body.userMail;
     let description = req.body.description ? req.body.description: false;
     let imageBinary = req.body.imageBinary ? req.body.imageBinary: false;
     let tagIdList = req.body.tagIdList ? req.body.tagIdList: "";
     let title = req.body.title ? req.body.title: false;
-    console.log("req.body: ",req.body);
+    // console.log("req.body: ",req.body);
 
 
     // Image save()
@@ -182,6 +179,8 @@ router.post("/add-image-to-the-memory",checkJwt, function(req, res, next){
         image.userMail = userMail;
     }
 
+    // TODO: need to check tag saving functionality.
+    // I don't think about duplication. it's too tired, and I have no time.
     if(tagIdList){
         if(tagIdList){
             tagIdList = tagIdList.split(",");
