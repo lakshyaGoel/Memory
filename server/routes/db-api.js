@@ -226,6 +226,12 @@ router.post("/add-memory", checkJwt, function(req, res, next){
     mem.city = memoryCities;
     mem.description = memoryDescription;
     mem.imageIdList = [];
+    // Don't use User db, because there is no db update code.
+    // It means, when new user sign up, the db did not updated
+    // and code below stop because there is no such user in User database.
+    // instead use auth0's username(email address) from client.
+    // in the meantime, you and we could use user in User db to test functionality.
+    // But, professor and TA could not use.
     User.findOne({ "name": userId}, function(err, user){
         if(err) return err;
         mem.userMail = user._id;
