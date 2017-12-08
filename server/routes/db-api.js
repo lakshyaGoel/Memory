@@ -125,25 +125,17 @@ router.post("/add-image-page", checkJwt, function(req, res, next){
     // get user mail address send from client
     let userMail = req.body.userMail;
     let memoryPromise = Memory.find({userMail: userMail});
-    let tagPromise = Tag.find({userMail: userMail});
-    Promise.all([memoryPromise, tagPromise])
-    .then(
-        function(result){
-            let memoryResult = result[0];
-            let tagResult = result[1];
-
-            // set sendMessage
-            sendMessage.status = true;
-            sendMessage.data = {memoryList: memoryResult, tagList: tagResult};
-            res.send(sendMessage);
-        },
-        function(reason){// if operation fault
-            sendMessage.data = {reason: reason};
-
-            // set sendMessage
-            res.send(sendMessage);
-        }
-    );
+   memoryPromise.exec(function(err, data){
+       if(err){
+           sendMessage.data = err;
+           res.send(sendMessage);
+       }
+       sendMessage.status = true;
+       sendMessage.data = data;
+       console.log("before sent");
+       console.log(sendMessage);
+       res.send(sendMessage);
+   });
 });// END: router.post("/add-image-page", checkJwt, function(req, res, next)
 
 
