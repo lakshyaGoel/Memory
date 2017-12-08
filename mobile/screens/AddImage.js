@@ -31,7 +31,29 @@ export default class AddImage extends React.Component {
     }
 
     componentDidMount(){
+        let {getAuthorizationHeader} = this.props.screenProps;
+        let auth = getAuthorizationHeader();
+        var data = {
+            userMail: this.props.screenProps.profile.name
+        };
 
+        let request = new Request(`${config.API_BASE}/api/db/add-image-page`, {
+            method: 'POST',
+            headers: {
+                "Authorization": auth.Authorization,
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(data)
+        });
+        console.log("myRequest: ", request);
+
+        fetch(request).then(function(data){
+            console.log("fatch in the on mount functionality of add image page");
+            console.log(data);
+            if(data.status === 200){
+                return true;
+            }
+        });
     }
 
     _pickImage = async() =>{
