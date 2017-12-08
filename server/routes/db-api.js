@@ -119,21 +119,23 @@ router.post("/image-detail", checkJwt, function(req, res, next){
 
 
 // api when go to add new Image page
-router.post("/add-image-page", checkJwt, function(req, res, next){
+router.post("/add-image-page", function(req, res, next){
     let sendMessage = {"status": false, data: {}};
 
     // get user mail address send from client
     let userMail = req.body.userMail;
-    let memoryPromise = Memory.find({userMail: userMail});
-   memoryPromise.exec(function(err, data){
+    Memory.find({userMail: userMail}).exec(function(err, data){
        if(err){
            sendMessage.data = err;
            res.send(sendMessage);
        }
        sendMessage.status = true;
-       sendMessage.data = data;
-       console.log("before sent");
-       console.log(sendMessage);
+       let sendData = {"":""};
+       for(var i = 0; i < data.length; i++){
+           sendData[data[i]._id.toString()] = data[i].name;
+       }
+       sendMessage.data = sendData;
+       console.log("sendMessage of add-image-page api",sendMessage);
        res.send(sendMessage);
    });
 });// END: router.post("/add-image-page", checkJwt, function(req, res, next)
@@ -149,7 +151,7 @@ router.post("/add-image-to-the-memory",checkJwt, function(req, res, next){
     let imageBinary = req.body.imageBinary ? req.body.imageBinary: false;
     let tagIdList = req.body.tagIdList ? req.body.tagIdList: "";
     let title = req.body.title ? req.body.title: false;
-    // console.log("req.body: ",req.body);
+    console.log("req.body: ",req.body);
 
 
     // Image save()

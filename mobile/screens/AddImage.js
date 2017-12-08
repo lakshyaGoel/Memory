@@ -24,15 +24,9 @@ export default class AddImage extends React.Component {
             image: null,
             position: 'top',
             disable_submit: true,
-            memoryList: []
+            memoryList: []// list of all memory data which added by login user
         };
 
-        this.handleSubmit = this.handleSubmit.bind(this);
-    }
-
-    componentDidMount(){
-        let {getAuthorizationHeader} = this.props.screenProps;
-        let auth = getAuthorizationHeader();
         var data = {
             userMail: this.props.screenProps.profile.name
         };
@@ -40,7 +34,6 @@ export default class AddImage extends React.Component {
         let request = new Request(`${config.API_BASE}/api/db/add-image-page`, {
             method: 'POST',
             headers: {
-                "Authorization": auth.Authorization,
                 "Content-Type": "application/json"
             },
             body: JSON.stringify(data)
@@ -50,10 +43,22 @@ export default class AddImage extends React.Component {
         fetch(request).then(function(data){
             console.log("fatch in the on mount functionality of add image page");
             console.log(data);
-            if(data.status === 200){
-                return true;
-            }
+            data = data.json();
+            return data;
+        })
+        .then(response => {
+            console.log(response.data);
+            this.setState({"memoryList":response.data});
+        })
+        .catch((error) => {
+            console.error(error);
         });
+
+        this.handleSubmit = this.handleSubmit.bind(this);
+    }
+
+    componentDidMount(){
+
     }
 
     _pickImage = async() =>{
@@ -79,6 +84,33 @@ export default class AddImage extends React.Component {
     };
 
     handleFormChange(formData){
+        var data = {
+            userMail: this.props.screenProps.profile.name
+        };
+
+        let request = new Request(`${config.API_BASE}/api/db/add-image-page`, {
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(data)
+        });
+        console.log("myRequest: ", request);
+
+        fetch(request).then(function(data){
+            console.log("fatch in the on mount functionality of add image page");
+            console.log(data);
+            data = data.json();
+            return data;
+        })
+        .then(response => {
+            console.log(response.data);
+            this.setState({"memoryList":response.data});
+        })
+        .catch((error) => {
+            console.error(error);
+        });
+
         const t = formData.image_title;
         const d = formData.image_description;
         const c = this.state.image;
@@ -98,7 +130,8 @@ export default class AddImage extends React.Component {
             description: this.state.formData.image_description,
             title: this.state.formData.image_title,
             imageBinary: this.state.image,
-            userMail: this.props.screenProps.profile.name
+            userMail: this.props.screenProps.profile.name,
+            image_memory: this.state.formData.image_memory//TODO: Need chec
         };
         console.log(imageData);
         /**
@@ -213,11 +246,7 @@ export default class AddImage extends React.Component {
                     <PickerField
                         ref='image_memory'
                         label='Choose Memory'
-                        options={{
-                            "": '',
-                            Memory1: 'Memory1',
-                            Memory2: 'Memory2'
-                        }}
+                        options={this.state.memoryList}
                         iconRight={< MaterialIcons name='chevron-right' size={
                             30
                         }/>}
