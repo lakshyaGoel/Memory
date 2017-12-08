@@ -146,7 +146,13 @@ router.post("/add-image-page", checkJwt, function(req, res, next){
 // api when save new Image
 router.post("/add-image-to-the-memory", checkJwt, function(req, res, next){
     // TODO: think about how to get image from client?
-
+    let userMail = req.body.userMail;
+    let description = req.body.description;
+    let imageBinary = req.body.imageBinary;
+    let tagIdList = req.body.tagIdList;
+    let title = req.body.title;
+    tagIdList = tagIdList.split(", ").map(b => b.substr(1));
+    console.log(userMail + " " + description + " " + imageBinary + " " + tagIdList + " " + title);
     // procedure
     // 1. add tag to tag db if tag is not in Tag db.
     // 2. get tagId of tags which added in procedure1.
