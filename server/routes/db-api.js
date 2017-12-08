@@ -39,13 +39,17 @@ var Image = require("../model/Image");
 
 
 // delete note by id
-router.post("/delete", checkJwt, function(req, res, next){
-
+// TODO: fix as post
+router.get("/delete",  function(req, res, next){
+    console.log("test");
+    res.send("hello teset");
 });
 
 
 // api to get all-memory item
-router.post("/all-memory", checkJwt, function(req, res, next){
+// TODO: fix as post
+// TODO: kill auth in the meantime of auth non setting
+router.post("/all-memory", /*checkJwt,*/ function(req, res, next){
     let sendMessage = {"status": false, data: {}};
 
     // get user mail address send from client
@@ -144,24 +148,65 @@ router.post("/add-image-page", checkJwt, function(req, res, next){
 
 
 // api when save new Image
-router.post("/add-image-to-the-memory", checkJwt, function(req, res, next){
+router.post("/add-image-to-the-memory",checkJwt, function(req, res, next){
+    let sendMessage = {"status": false, data: {}};
+    console.log("detect save image from client");
+    // res.send("test");
+    // exit(0);
     // TODO: think about how to get image from client?
+    let memoryId = req.body.memoryId? req.body.memoryId: false;
     let userMail = req.body.userMail;
-    let description = req.body.description;
-    let imageBinary = req.body.imageBinary;
-    let tagIdList = req.body.tagIdList;
-    let title = req.body.title;
-    tagIdList = tagIdList.split(", ").map(b => b.substr(1));
-    console.log(userMail + " " + description + " " + imageBinary + " " + tagIdList + " " + title);
-    // procedure
-    // 1. add tag to tag db if tag is not in Tag db.
-    // 2. get tagId of tags which added in procedure1.
-    // 3. get memory data which have memoryId given from client
-    // 4. make new Image object and set info(set description, imageBinary, userMail, and push tagId)
-    // 5. just push Image object to memory's imageIdList!
+    let description = req.body.description ? req.body.description: false;
+    let imageBinary = req.body.imageBinary ? req.body.imageBinary: false;
+    let tagIdList = req.body.tagIdList ? req.body.tagIdList: "";
+    let title = req.body.title ? req.body.title: false;
+    console.log("req.body: ",req.body);
 
+
+    // Image save()
+    let image = new Image();
+
+    if(title){
+        image.title = title;
+    }
+
+    if(description){
+        image.description = description;
+    }
+
+    if(imageBinary){
+        image.imageBinary = imageBinary;
+    }
+
+    if(userMail){
+        image.userMail = userMail;
+    }
+
+    if(tagIdList){
+        if(tagIdList){
+            tagIdList = tagIdList.split(",");
+            for(var i = 0; i < tagIdList.length; i++){
+                var tag = new Tag();
+                tag.name = tagIdList[i];
+                tag.save(function(err){});
+                image.tagIdList.append(tag._id);
+            }
+        }
+    }
+
+    image.save(function(err){});
+
+    if(memoryId){
+        Memory.findOne({_id: ObjectId(memoryId)}).exec(function(err, data){
+            data.imageIdList.push(image._id);
+            data.save(function(err){});
+        });
+    }
+    // end image save
+
+    sendMessage.status = true;
     // see: https://stackoverflow.com/questions/31021343/add-to-an-object-to-population-in-a-mongoose-model
-
+    res.send(sendMessage);
 });// END: router.post("/add-image-to-the-memory", checkJwt, function(req, res, next)
 
 

@@ -7,6 +7,7 @@ mongoose.connect(process.env.DB_URI);
 var image = new mongoose.Schema({
     id: Schema.Types.ObjectId,
     tagIdList: [{type: Schema.Types.ObjectId, ref: "Tag"}],
+    title: String,
     description: String,
     imageBinary: String,
     userMail: String

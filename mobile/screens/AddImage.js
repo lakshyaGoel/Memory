@@ -16,12 +16,18 @@ import Toast, {DURATION} from 'react-native-easy-toast';
 import config from '../config';
 
 export default class AddImage extends React.Component {
-  state = {
-    formData: {},
-    image: null,
-    position: 'top',
-    disable_submit: true
-  };
+  constructor(props){
+    super(props);
+
+    this.state = {
+      formData: {},
+      image: null,
+      position: 'top',
+      disable_submit: true
+    };
+
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
 
   _pickImage = async() => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -57,6 +63,7 @@ export default class AddImage extends React.Component {
     this.props.onFormChange && this.props.onFormChange(formData);
   }
   handleSubmit() {
+    // console.log("detect submit");
     var imageData = {
       tagIdList: this.state.formData.image_tags,
       description: this.state.formData.image_description,
@@ -64,6 +71,10 @@ export default class AddImage extends React.Component {
       imageBinary: this.state.image,
       userMail: this.props.screenProps.profile.name
     };
+    console.log(imageData);
+    /**
+     * imageBinary shows that image's internal URL. So I think I could use this link to show image instead of parsing binary data.
+     */
     const {getAuthorizationHeader} = this.props.screenProps;
     const auth = getAuthorizationHeader();
 
@@ -75,6 +86,9 @@ export default class AddImage extends React.Component {
       },
       body: JSON.stringify(imageData)
     });
+    console.log("myRequest: ", request);
+    console.log("fetch test");
+
     fetch(request).then(function (data) {
       console.log('Request succeeded with JSON response', data);
       if (data.status === 200) {
@@ -202,7 +216,6 @@ export default class AddImage extends React.Component {
             label='Tags'
             ref='image_tags'
             placeholder='Tags'
-            helpText='Enter tags like #note'
             value={this.state.text}
             helpText={((self) => {
             if (Object.keys(self.refs).length !== 0) {
@@ -228,7 +241,7 @@ export default class AddImage extends React.Component {
         <TouchableHighlight
           disabled={this.state.disable_submit}
           style={styles.button}
-          onPress={this.handleSubmit.bind(this)}
+          onPress={this.handleSubmit}
           underlayColor="#99d9f4">
           <Text style={styles.buttonText}>Save</Text>
         </TouchableHighlight>
