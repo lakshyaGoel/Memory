@@ -57,13 +57,13 @@ router.post("/all-memory", function(req, res, next){
     console.log(userMail);
 
     if(userMail != ""){// TODO: need check this, maybe undefined or something.
-        Memory.find({"userMail": userMail}).exec(function(err, result){
+        Memory.find({"userMail": userMail}).populate("imageIdList").exec(function(err, result){
             if(!err){
                 // set sendMessage
                 sendMessage.status = true;
                 sendMessage.data = result;
             }
-            console.log(sendMessage);
+            console.log(sendMessage.data[0]);
             res.send(sendMessage);
         });
     }else{
