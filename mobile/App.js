@@ -5,6 +5,7 @@ import {
   StyleSheet,
   Text,
   View,
+  Image,
 } from 'react-native';
 import navigation, { TabNavigator } from 'react-navigation';
 import { FontAwesome, MaterialCommunityIcons, Entypo } from '@expo/vector-icons';
@@ -16,6 +17,7 @@ import AddMemory from './screens/AddText';
 import AddImage from './screens/AddImage';
 import Options from './screens/Options';
 import SignIn from './screens/AuthDemoScreen';
+import Landing from './screens/LandingScreen';
 
 const RootNavigator = TabNavigator({
   Memories: {
@@ -52,7 +54,7 @@ const RootNavigator = TabNavigator({
   SignIn:{
     screen: SignIn,
     navigationOptions:{
-      title: 'Sign In',
+      title: 'Profile',
       tabBarIcon: ({ tintColor }) => <FontAwesome name="list" size={32} color={tintColor} />
     }
   }
@@ -63,7 +65,14 @@ class App extends React.Component {
   render() {
     // screenProps is one way to pass props to a navigator
     // https://reactnavigation.org/docs/navigators/navigation-options#Two-Ways-to-specify-each-option
-    return <RootNavigator screenProps={this.props} />
+    if(this.props.profile.name){
+      return <RootNavigator screenProps={this.props} />
+      //return <Text>The value is {this.props.profile.name}</Text>
+    }
+    else{
+      return <Landing screenProps={this.props}/>
+      //return <Text>The value is {this.props.profile.name}</Text>
+    }
   }
 
 }
