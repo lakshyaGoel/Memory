@@ -6,7 +6,7 @@ import {
 } from 'react-native';
 import { Card, Button } from 'react-native-elements'
 
-const CardComponent = ({title, imgPath, description, buttonFunc}) =>{
+const CardComponent = ({title, imgPath, description}) =>{
     return (
         <Card style={{width: "100%"}}
               title={title? title: "Dummy title"}
@@ -15,10 +15,9 @@ const CardComponent = ({title, imgPath, description, buttonFunc}) =>{
                 {description? description: "dummy description goes here."}
             </Text>
             <Button
-                onPress={buttonFunc}
                 backgroundColor='#03A9F4'
                 buttonStyle={{borderRadius: 0, marginLeft: 0, marginRight: 0, marginBottom: 0}}
-                title='VIEW Memory'/>
+                title='VIEW Image'/>
         </Card>
     )
 };
@@ -30,12 +29,7 @@ export default class Memory extends React.Component {
 
     render(){
         return (
-            <CardComponent
-                title={this.props.title}
-                description={this.props.description}
-                imgPath={this.props.imgPath}
-                buttonFunc={this.props.buttonFunc}
-            />
+            <CardComponent title={this.props.title} description={this.props.description} imgPath={this.props.imgPath}/>
         )
     }
 }
