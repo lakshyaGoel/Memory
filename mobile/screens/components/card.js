@@ -29,7 +29,7 @@ export default class Memory extends React.Component {
 
     render(){
         return (
-            <CardComponent title={this.props.title}/>
+            <CardComponent title={this.props.title} description={this.props.description} imgPath={this.props.imgPath}/>
         )
     }
 }

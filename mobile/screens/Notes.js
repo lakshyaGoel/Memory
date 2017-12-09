@@ -5,28 +5,73 @@ import {
     Text,
     View,
 } from 'react-native';
+import { Constants } from 'expo';
 import Memory from './components/card';
+import config from '../config';
 
-// TODO: use Stateless Functional Component(SFC) to make your component smaller and maintainable!
-// TODO: separate Presentational Component(=SFC) and Container Component
-// TODO: one good idea relate to function in SFC is send parameter and function from Container Component to SFC, not define function!
-// What a great idea this is!
-//
-// don't know SFC? google it!
-// or see below.
-const item = ({text}) => {
-    return (
-        <View><Text>This is SFC, {text}</Text></View>
-    );
-};
-export default class Notes extends React.Component {
+
+
+class Notes extends React.Component {
+    constructor(props){
+        super(props);
+        this.state = {
+            "memoryList": []
+        };
+        this.reload = this.reload.bind(this);
+    }
+
+    reload(){
+        console.log("reload:",this.props);
+        var data = {
+            userMail: this.props.screenProps.profile.name
+        };
+
+        let request = new Request(`${config.API_BASE}/api/db/all-memory`, {
+            method: "POST",
+            headers:{
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(data)
+        });
+
+        fetch(request)
+        .then(response => {
+            if(response.status){
+                return response;
+            }
+            console.log(response);
+        }).then(res => res.json())
+        .then(json => {
+            console.log("respond data");
+            if(json.status){
+                this.setState({"memoryList": json.data});
+            }
+        });
+    }
+
+    componentDidMount(){
+        console.log("here in componentDidMount");
+
+       this.reload();
+    }
 
     render(){
-        return (
-            <View style={styles.container}>
-                <Memory/>
-            </View>
-        )
+        if(this.state.memoryList.length == 0){
+            return (
+                <View style={styles.container}>
+                    <Button onPress={this.reload} title="Reload">Reload</Button>
+                </View>
+            )
+        }else{
+            return (
+                <View style={styles.container}>
+                    {this.state.memoryList.map((data) => {
+                        console.log("inside",data);
+                        return (<Memory title={data.name} description={data.description} />);
+                    })}
+                </View>
+            )
+        }
     }
 }
 
@@ -43,3 +88,6 @@ const styles = StyleSheet.create({
         marginTop: 40,
     },
 });
+
+
+export default Notes;
