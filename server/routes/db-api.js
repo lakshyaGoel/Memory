@@ -47,8 +47,6 @@ router.get("/delete",  function(req, res, next){
 
 
 // api to get all-memory item
-// TODO: fix as post
-// TODO: kill auth in the meantime of auth non setting
 router.post("/all-memory", function(req, res, next){
     let sendMessage = {"status": false, data: {}};
 
@@ -56,7 +54,7 @@ router.post("/all-memory", function(req, res, next){
     let userMail = req.body.userMail;
     console.log(userMail);
 
-    if(userMail != ""){// TODO: need check this, maybe undefined or something.
+    if(userMail != ""){
         Memory.find({"userMail": userMail}).populate("imageIdList").exec(function(err, result){
             if(!err){
                 // set sendMessage
@@ -68,26 +66,27 @@ router.post("/all-memory", function(req, res, next){
         });
     }else{
         res.send(sendMessage);
-    }// TODO: need test. I did not test yet.
+    }
 });// END: router.post("/all-memory", checkJwt, function(req, res, next)
 
 
 // api to get image item of certain memory
-router.post("/memory-image", checkJwt, function(req, res, next){
+router.post("/memory-image", function(req, res, next){
     let sendMessage = {"status": false, data: {}};
 
     // get tapped memoryId send from client
     let memoryId = req.body.memoryId;
 
-    if(memoryId != ""){// TODO: need check this, maybe undefined or something.
-        Memory.find({_id: ObjectId(memoryId)})
-        .populate("imageIdList")// TODO: populate test!
+    if(memoryId != ""){
+        Memory.findOne({_id: ObjectId(memoryId)})
+        .populate("imageIdList")
         .exec(function(err, result){
             if(!err){
                 // set sendMessage
                 sendMessage.status = true;
                 sendMessage.data = result;
             }
+            // console.log(sendMessage.data.imageIdList);
             res.send(sendMessage);
         });
     }else{
@@ -104,7 +103,7 @@ router.post("/image-detail", checkJwt, function(req, res, next){
     let imageId = req.body.imageId;
 
     if(imageId != ""){// TODO: need check this, maybe undefined or something.
-        Image.find({_id: ObjectId(imageId)})
+        Image.findOne({_id: ObjectId(imageId)})
         .populate("tagIdList")// TODO: populate test!
         .exec(function(err, result){
             if(!err){
