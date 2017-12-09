@@ -8,8 +8,7 @@ import { Card, Button } from 'react-native-elements'
 
 const CardComponent = ({title, imgPath, description, buttonFunc}) =>{
     return (
-        <Card style={{width: "100%"}}
-              title={title? title: "Dummy title"}
+        <Card title={title? title: "Dummy title"}
               image={imgPath? {uri: imgPath}: require('../../src/image/dummy.png')}>
             <Text style={{marginBottom: 10}}>
                 {description? description: "dummy description goes here."}
@@ -34,7 +33,9 @@ export default class Memory extends React.Component {
 
     render(){
         return (
-            <View ref={component => this._root = component}>
+            <View
+                ref={component => this._root = component}
+            >
             <CardComponent
                 title={this.props.title}
                 description={this.props.description}

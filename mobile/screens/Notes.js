@@ -4,14 +4,15 @@ import {
     StyleSheet,
     Text,
     View,
-    TouchableHighlight
+    TouchableHighlight,
+    FlatList,
+    Dimensions
 } from 'react-native';
 import { Constants } from 'expo';
 import { StackNavigator } from 'react-navigation'
 import Memory from './components/card';
 import ImageCard from './components/imageCard';
 import config from '../config';
-
 
 
 class Notes extends React.Component {
@@ -24,27 +25,27 @@ class Notes extends React.Component {
     }
 
     reload(){
-        console.log("reload:",this.props);
+        console.log("reload:", this.props);
         var data = {
             userMail: this.props.screenProps.profile.name
         };
 
         let request = new Request(`${config.API_BASE}/api/db/all-memory`, {
             method: "POST",
-            headers:{
+            headers: {
                 "Content-Type": "application/json"
             },
             body: JSON.stringify(data)
         });
 
         fetch(request)
-        .then(response => {
+        .then(response =>{
             if(response.status){
                 return response;
             }
             console.log(response);
         }).then(res => res.json())
-        .then(json => {
+        .then(json =>{
             console.log("respond data");
             if(json.status){
                 this.setState({"memoryList": json.data});
@@ -53,7 +54,7 @@ class Notes extends React.Component {
     }
 
     componentDidMount(){
-       this.reload();
+        this.reload();
     }
 
     goToMemory(memoryId){
@@ -71,16 +72,24 @@ class Notes extends React.Component {
                 </View>
             )
         }else{
+            const window = Dimensions.get('window');
             return (
                 <View style={styles.container}>
-                    {this.state.memoryList.map((data) => {
-                        console.log("inside",data);
-                        return (
-                            <TouchableHighlight onPress={this.goToMemory(data._id)}>
-                            <Memory title={data.name} description={data.description} imgPath={data.imageIdList[0].imageBinary}/>
-                            </TouchableHighlight>
-                        );
-                    })}
+                        <FlatList
+                            style={{width: window.width}}
+                            data={this.state.memoryList}
+                            renderItem={({item}) =>{
+                                return (
+                                    <TouchableHighlight onPress={this.goToMemory(item._id)}
+                                                        style={{flex: 1}}
+                                    >
+                                        <Memory title={item.name} description={item.description}
+                                                imgPath={item.imageIdList[0].imageBinary}/>
+                                    </TouchableHighlight>
+                                );
+                            }
+                            }
+                        />
                 </View>
             )
         }
@@ -91,9 +100,7 @@ class Notes extends React.Component {
 class Note2 extends React.Component {
     constructor(props){
         super(props);
-        this.state = {
-
-        };
+        this.state = {};
         console.log("run note2: and see memoryId", props.navigation.state.params.memoryId);
         let memoryId = props.navigation.state.params.memoryId;
 
@@ -103,14 +110,14 @@ class Note2 extends React.Component {
 
         let request = new Request(`${config.API_BASE}/api/db/memory-image`, {
             method: "POST",
-            headers:{
+            headers: {
                 "Content-Type": "application/json"
             },
             body: JSON.stringify(data)
         });
 
         fetch(request)
-        .then(response => {
+        .then(response =>{
             if(response.status){
                 return response;
             }
@@ -119,7 +126,7 @@ class Note2 extends React.Component {
             // could not move...
             //
         }).then(res => res.json())
-        .then(json => {
+        .then(json =>{
             if(json.status){
                 // console.log({"memoryList": json.data});
                 this.state.memoryList = json.data;// not so good but
@@ -139,14 +146,14 @@ class Note2 extends React.Component {
 
         let request = new Request(`${config.API_BASE}/api/db/memory-image`, {
             method: "POST",
-            headers:{
+            headers: {
                 "Content-Type": "application/json"
             },
             body: JSON.stringify(data)
         });
 
         fetch(request)
-        .then(response => {
+        .then(response =>{
             if(response.status){
                 return response;
             }
@@ -155,7 +162,7 @@ class Note2 extends React.Component {
             // could not move...
             //
         }).then(res => res.json())
-        .then(json => {
+        .then(json =>{
             if(json.status){
                 console.log({"memoryList": json.data});
                 this.setState({"memoryList": json.data});
@@ -173,14 +180,14 @@ class Note2 extends React.Component {
 
         let request = new Request(`${config.API_BASE}/api/db/memory-image`, {
             method: "POST",
-            headers:{
+            headers: {
                 "Content-Type": "application/json"
             },
             body: JSON.stringify(data)
         });
 
         fetch(request)
-        .then(response => {
+        .then(response =>{
             if(response.status){
                 return response;
             }
@@ -189,7 +196,7 @@ class Note2 extends React.Component {
             // could not move...
             //
         }).then(res => res.json())
-        .then(json => {
+        .then(json =>{
             if(json.status){
                 console.log({"memoryList": json.data});
                 this.setState({"memoryList": json.data});
@@ -197,8 +204,6 @@ class Note2 extends React.Component {
             }
         });
     }
-
-
 
 
     goToMemory(memoryId){
@@ -214,15 +219,23 @@ class Note2 extends React.Component {
                 </View>
             )
         }else{
+            const window = Dimensions.get('window');
             return (
                 <View style={styles.container}>
-                    {this.state.memoryList.imageIdList.map((data) => {
-                        return (
-                            <TouchableHighlight onPress={this.goToMemory(data._id)}>
-                                <ImageCard title={data.title} description={data.description} imgPath={data.imageBinary}/>
-                            </TouchableHighlight>
-                        );
-                    })}
+                    <FlatList
+                        style={{width: window.width}}
+                        data={this.state.memoryList.imageIdList}
+                        renderItem={({item}) =>{
+                            return (
+                                <View style={{flex: 1}}>
+                                    <ImageCard style={{flex: 1}}
+                                        title={item.title} description={item.description}
+                                               imgPath={item.imageBinary}/>
+                                </View>
+                            );
+                        }
+                        }
+                    />
                 </View>
             )
         }
@@ -246,10 +259,16 @@ const styles = StyleSheet.create({
 const ReadStack = StackNavigator({
     AllMemory: {
         screen: Notes,
+        navigationOptions: ({navigation}) => ({
+            title: "All Memory",
+        }),
     },
-    MemoryDetail:{
+    MemoryDetail: {
         screen: Note2,
-        path: "Note2/:memoryId"
+        path: "Note2/:memoryId",
+        navigationOptions: ({navigation}) => ({
+            title: "Memory Image",
+        }),
     }
 }, {
     initialRouteName: "AllMemory"
