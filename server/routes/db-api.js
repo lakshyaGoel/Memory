@@ -145,7 +145,7 @@ router.post("/add-image-page", function(req, res, next){
 router.post("/add-image-to-the-memory",checkJwt, function(req, res, next){
     let sendMessage = {"status": false, data: {}};
 
-    let memoryId = req.body.memoryId? req.body.memoryId: false;
+    let memoryId = req.body.image_memory? req.body.image_memory: false;
     let userMail = req.body.userMail;
     let description = req.body.description ? req.body.description: false;
     let imageBinary = req.body.imageBinary ? req.body.imageBinary: false;
