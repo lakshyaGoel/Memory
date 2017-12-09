@@ -67,7 +67,7 @@ class Notes extends React.Component {
                 <View style={styles.container}>
                     {this.state.memoryList.map((data) => {
                         console.log("inside",data);
-                        return (<Memory title={data.name} description={data.description} />);
+                        return (<Memory title={data.name} description={data.description} imgPath={data.imageIdList[0].imageBinary}/>);
                     })}
                 </View>
             )

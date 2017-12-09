@@ -10,7 +10,7 @@ const CardComponent = ({title, imgPath, description}) =>{
     return (
         <Card style={{width: "100%"}}
               title={title? title: "Dummy title"}
-              image={imgPath? imgPath: require('../../src/image/dummy.png')}>
+              image={imgPath? {uri: imgPath}: require('../../src/image/dummy.png')}>
             <Text style={{marginBottom: 10}}>
                 {description? description: "dummy description goes here."}
             </Text>
