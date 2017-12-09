@@ -8,7 +8,7 @@ import { Card, Button } from 'react-native-elements'
 
 const CardComponent = ({title, imgPath, description}) =>{
     return (
-        <Card style={{width: "100%"}}
+        <Card style={{width: 200}}
               title={title? title: "Dummy title"}
               image={imgPath? {uri: imgPath}: require('../../src/image/dummy.png')}>
             <Text style={{marginBottom: 10}}>
@@ -29,8 +29,11 @@ export default class ImageCard extends React.Component {
 
     render(){
         return (
-            <View ref={component => this._root = component}>
-            <CardComponent title={this.props.title} description={this.props.description} imgPath={this.props.imgPath}/>
+            <View
+                ref={component => this._root = component}
+                style={{flex: 1}}
+            >
+            <CardComponent style={{flex: 1}} title={this.props.title} description={this.props.description} imgPath={this.props.imgPath}/>
             </View>
         )
     }
