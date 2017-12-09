@@ -28,14 +28,20 @@ export default class Memory extends React.Component {
         super(props);
     }
 
+    setNativeProps (nativeProps) {
+        this._root.setNativeProps(nativeProps);
+    }
+
     render(){
         return (
+            <View ref={component => this._root = component}>
             <CardComponent
                 title={this.props.title}
                 description={this.props.description}
                 imgPath={this.props.imgPath}
                 buttonFunc={this.props.buttonFunc}
             />
+                </View>
         )
     }
 }

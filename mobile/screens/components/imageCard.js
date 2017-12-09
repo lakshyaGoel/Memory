@@ -14,22 +14,24 @@ const CardComponent = ({title, imgPath, description}) =>{
             <Text style={{marginBottom: 10}}>
                 {description? description: "dummy description goes here."}
             </Text>
-            <Button
-                backgroundColor='#03A9F4'
-                buttonStyle={{borderRadius: 0, marginLeft: 0, marginRight: 0, marginBottom: 0}}
-                title='VIEW Image'/>
         </Card>
     )
 };
 
-export default class Memory extends React.Component {
+export default class ImageCard extends React.Component {
     constructor(props){
         super(props);
     }
 
+    setNativeProps (nativeProps) {
+        this._root.setNativeProps(nativeProps);
+    }
+
     render(){
         return (
+            <View ref={component => this._root = component}>
             <CardComponent title={this.props.title} description={this.props.description} imgPath={this.props.imgPath}/>
+            </View>
         )
     }
 }
