@@ -49,11 +49,12 @@ router.get("/delete",  function(req, res, next){
 // api to get all-memory item
 // TODO: fix as post
 // TODO: kill auth in the meantime of auth non setting
-router.post("/all-memory", /*checkJwt,*/ function(req, res, next){
+router.post("/all-memory", function(req, res, next){
     let sendMessage = {"status": false, data: {}};
 
     // get user mail address send from client
     let userMail = req.body.userMail;
+    console.log(userMail);
 
     if(userMail != ""){// TODO: need check this, maybe undefined or something.
         Memory.find({"userMail": userMail}).exec(function(err, result){
@@ -62,6 +63,7 @@ router.post("/all-memory", /*checkJwt,*/ function(req, res, next){
                 sendMessage.status = true;
                 sendMessage.data = result;
             }
+            console.log(sendMessage);
             res.send(sendMessage);
         });
     }else{
@@ -135,7 +137,7 @@ router.post("/add-image-page", function(req, res, next){
            sendData[data[i]._id.toString()] = data[i].name;
        }
        sendMessage.data = sendData;
-       console.log("sendMessage of add-image-page api",sendMessage);
+       // console.log("sendMessage of add-image-page api",sendMessage);
        res.send(sendMessage);
    });
 });// END: router.post("/add-image-page", checkJwt, function(req, res, next)
@@ -145,13 +147,13 @@ router.post("/add-image-page", function(req, res, next){
 router.post("/add-image-to-the-memory",checkJwt, function(req, res, next){
     let sendMessage = {"status": false, data: {}};
 
-    let memoryId = req.body.memoryId? req.body.memoryId: false;
+    let memoryId = req.body.image_memory? req.body.image_memory: false;
     let userMail = req.body.userMail;
     let description = req.body.description ? req.body.description: false;
     let imageBinary = req.body.imageBinary ? req.body.imageBinary: false;
     let tagIdList = req.body.tagIdList ? req.body.tagIdList: "";
     let title = req.body.title ? req.body.title: false;
-    console.log("req.body: ",req.body);
+    // console.log("req.body: ",req.body);
 
 
     // Image save()
