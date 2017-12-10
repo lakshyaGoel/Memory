@@ -30,6 +30,10 @@ along with a very brief caption:**
 
 ![login](./screenshot/login.gif)
 
+![read-main](./screenshot/read-main.gif)
+
+![add-image](./screenshot/add-image.gif)
+
 
 ## External Dependencies
 
