@@ -28,11 +28,10 @@ CSCI 5117, Fall 2017, [assignment description](https://docs.google.com/document/
 **[Add a screenshot of each key page (maximum 4)](https://stackoverflow.com/questions/10189356/how-to-add-screenshot-to-readmes-in-github-repository)
 along with a very brief caption:**
 
-![login](./screenshot/login.gif)
 
-![read-main](./screenshot/read-main.gif)
-
-![add-image](./screenshot/add-image.gif)
+|Login|Item view|add new item|
+|---|---|---|
+|![login](./screenshot/login.gif)|![read-main](./screenshot/read-main.gif)|![add-image](./screenshot/add-image.gif)|
 
 
 ## External Dependencies
