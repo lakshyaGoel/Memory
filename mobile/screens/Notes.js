@@ -60,7 +60,7 @@ class Notes extends React.Component {
     goToMemory(memoryId){
         var navi = this.props.navigation;
         return function(){
-            this.reload();// reload memory item when clicking memoryCardItem
+            // this.reload();// reload memory item when clicking memoryCardItem
             navi.navigate('MemoryDetail', {"memoryId": memoryId});
         }
     }
