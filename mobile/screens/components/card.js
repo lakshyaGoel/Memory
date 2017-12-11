@@ -13,11 +13,6 @@ const CardComponent = ({title, imgPath, description, buttonFunc}) =>{
             <Text style={{marginBottom: 10}}>
                 {description? description: "dummy description goes here."}
             </Text>
-            <Button
-                onPress={buttonFunc}
-                backgroundColor='#03A9F4'
-                buttonStyle={{borderRadius: 0, marginLeft: 0, marginRight: 0, marginBottom: 0}}
-                title='VIEW Memory'/>
         </Card>
     )
 };
