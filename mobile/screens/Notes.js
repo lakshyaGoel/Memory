@@ -84,7 +84,8 @@ class Notes extends React.Component {
                                                         style={{flex: 1}}
                                     >
                                         <Memory title={item.name} description={item.description}
-                                                imgPath={item.imageIdList[0].imageBinary}/>
+                                                imgPath={item.imageIdList[0]? item.imageIdList[0].imageBinary: "" }/>
+                                        {/* item.imageIdList[0].imageBinary is null when adding memory but not adding image to memory*/}
                                     </TouchableHighlight>
                                 );
                             }
