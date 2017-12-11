@@ -43,14 +43,6 @@ const RootNavigator = TabNavigator({
     },
 
   },
-  Options: {
-    screen: Options,
-    navigationOptions: {
-      title: 'Options',
-      tabBarIcon: ({ tintColor }) => <FontAwesome name="list" size={32} color={tintColor} />
-    },
-  },
-  //Temporary. Needs to be removed after signIn and signUp works
   SignIn:{
     screen: SignIn,
     navigationOptions:{
