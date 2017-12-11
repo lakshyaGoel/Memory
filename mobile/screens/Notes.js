@@ -60,6 +60,7 @@ class Notes extends React.Component {
     goToMemory(memoryId){
         var navi = this.props.navigation;
         return function(){
+            this.reload();// reload memory item when clicking memoryCardItem
             navi.navigate('MemoryDetail', {"memoryId": memoryId});
         }
     }
@@ -85,7 +86,6 @@ class Notes extends React.Component {
                                     >
                                         <Memory title={item.name} description={item.description}
                                                 imgPath={item.imageIdList[0]? item.imageIdList[0].imageBinary: "" }/>
-                                        {/* item.imageIdList[0].imageBinary is null when adding memory but not adding image to memory*/}
                                     </TouchableHighlight>
                                 );
                             }
