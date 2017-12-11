@@ -15,7 +15,6 @@ import { withAuth } from './Auth';
 import Memories from './screens/Notes';
 import AddMemory from './screens/AddText';
 import AddImage from './screens/AddImage';
-import Options from './screens/Options';
 import SignIn from './screens/AuthDemoScreen';
 import Landing from './screens/LandingScreen';
 

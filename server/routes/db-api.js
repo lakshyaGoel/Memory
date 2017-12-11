@@ -15,22 +15,6 @@ var Image = require("../model/Image");
  * - add memory
  * - add image
  * - add tag?
- *
- * // read part
- * - show all memories I registered
- * - show all image info in certain memory
- * - show image detail
- * - search memory by date/name/or something like that.
- *
- * // update part
- * - edit memory
- * - edit image
- * - edit tag?
- *
- * // delete part
- * - delete memory
- * - delete image and description set
- * - delete tag?
  */
 
 // MUST USE sendMessage Object to send message to the client
@@ -206,6 +190,8 @@ router.post("/add-image-to-the-memory",checkJwt, function(req, res, next){
 
 // api when save new memory page
 router.post("/add-memory", checkJwt, function(req, res, next){
+    let sendMessage = {"status": false, data: {}};
+
     var memoryTitle = req.body.memoryTitle;
     var memoryDescription = req.body.memoryDescription;
     var memoryCountry = req.body.memoryCountry;
@@ -221,24 +207,14 @@ router.post("/add-memory", checkJwt, function(req, res, next){
     mem.city = memoryCities;
     mem.description = memoryDescription;
     mem.imageIdList = [];
-    // Don't use User db, because there is no db update code.
-    // It means, when new user sign up, the db did not updated
-    // and code below stop because there is no such user in User database.
-    // instead use auth0's username(email address) from client.
-    // in the meantime, you and we could use user in User db to test functionality.
-    // But, professor and TA could not use.
-    User.findOne({ "name": userId}, function(err, user){
-        if(err) return err;
-        mem.userMail = user._id;
-        mem.save(function(err){
-            if(err){
-                console.log(err);
-            }else{
-                console.log("Memory Saved!");
-            }
-        });
-        res.send(JSON.stringify({s: "Success"}));
-    })
+    mem.userMail = userId;
+
+    mem.save(function(err){
+        if(!err){
+            sendMessage.status = true;
+        }
+        res.send(sendMessage);
+    });
 });
 
 // TODO: api to search certain tag
