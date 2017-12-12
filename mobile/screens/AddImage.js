@@ -9,7 +9,7 @@ import {
     ScrollView,
     TextInput
 } from 'react-native';
-import { Form, Separator, InputField, SwitchField, PickerField } from 'react-native-form-generator';
+import { Form, Separator, InputField, SwitchField, PickerField, LinkField } from 'react-native-form-generator';
 import { Constants, ImagePicker } from 'expo';
 import { MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
 import Toast, { DURATION } from 'react-native-easy-toast';
@@ -22,7 +22,7 @@ export default class AddImage extends React.Component {
         this.state = {
             formData: {},
             image: null,
-            position: 'top',
+            position: 'center',
             disable_submit: true,
             memoryList: []// list of all memory data which added by login user
         };
@@ -158,7 +158,8 @@ export default class AddImage extends React.Component {
             }
         }).then(re =>{
             this.refs.toast.show('Image Saved!', DURATION.LENGTH_SHORT);
-            this.setState({formData: {}});
+            this.setState({image: null, memoryList: []});
+            
             //TO-DO Navigate to ALl Notes
         }).catch(function(error){
             console.log('Request failed', error);
@@ -201,7 +202,7 @@ export default class AddImage extends React.Component {
                             }
                         ]}/>
 
-                    <InputField ref='Choose_Image' label='Choose Image'/>
+                    <LinkField ref='Choose_Image' label='Choose Image' onPress={()=>{}}/>
                     <TouchableHighlight onPress={this._pickImageCam}>
                         <MaterialCommunityIcons name="camera" size={32}/>
                     </TouchableHighlight>
