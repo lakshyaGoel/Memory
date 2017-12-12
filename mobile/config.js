@@ -4,7 +4,7 @@ console.log(`loading configuration (dev mode=${__DEV__})`);
 const config = {
   // TODO: domain name of your heroku app, e.g.:
   //   API_BASE: 'https://foo-bar-baz.herokuapp.com',
-  API_BASE: 'https://react-native-template-5117.herokuapp.com/',
+  API_BASE: 'https://murmuring-dusk-63583.herokuapp.com/',
 
   // can use same client/api id as in module 3 project
   AUTH0_DOMAIN: 'lakshyagoel.auth0.com',
