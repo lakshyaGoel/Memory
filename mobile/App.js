@@ -18,6 +18,8 @@ import AddImage from './screens/AddImage';
 import SignIn from './screens/AuthDemoScreen';
 import Landing from './screens/LandingScreen';
 
+console.disableYellowBox = true;
+
 const RootNavigator = TabNavigator({
   Memories: {
     screen: Memories,

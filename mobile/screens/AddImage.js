@@ -158,7 +158,7 @@ export default class AddImage extends React.Component {
             }
         }).then(re =>{
             this.refs.toast.show('Image Saved!', DURATION.LENGTH_SHORT);
-            this.setState({image: null, memoryList: []});
+            this.setState({image: null, memoryList: [],formData:null});
             
             //TO-DO Navigate to ALl Notes
         }).catch(function(error){
